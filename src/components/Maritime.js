@@ -7,6 +7,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -33,53 +34,28 @@ function Copyright(props) {
   );
 }
 
-function DashboardContent() {
-  function createData(id, date, name, shipTo, paymentMethod, amount) {
-    return { id, date, name, shipTo, paymentMethod, amount };
-  }
 
-  const rows = [
-    createData(
-      0,
-      "16 Mar, 2019",
-      "Elvis Presley",
-      "Tupelo, MS",
-      "VISA ⠀•••• 3719",
-      312.44
-    ),
-    createData(
-      1,
-      "16 Mar, 2019",
-      "Paul McCartney",
-      "London, UK",
-      "VISA ⠀•••• 2574",
-      866.99
-    ),
-    createData(
-      2,
-      "16 Mar, 2019",
-      "Tom Scholz",
-      "Boston, MA",
-      "MC ⠀•••• 1253",
-      100.81
-    ),
-    createData(
-      3,
-      "16 Mar, 2019",
-      "Michael Jackson",
-      "Gary, IN",
-      "AMEX ⠀•••• 2000",
-      654.39
-    ),
-    createData(
-      4,
-      "15 Mar, 2019",
-      "Bruce Springsteen",
-      "Long Branch, NJ",
-      "VISA ⠀•••• 5919",
-      212.79
-    ),
-  ];
+function DashboardContent() {
+  const [data, setData] = React.useState([])
+  const [ordred, setOrdred] = React.useState(false)
+  React.useEffect(() => {
+    (() => {
+      fetch('http://localhost:8080/Transport/maritime')
+        .then((response) => response.json())
+        .then((data) => {
+          console.log({data});
+          setData(data.results.bindings)})
+    })()
+  }, [])
+
+  const orederByPoids = () => {
+    fetch(ordred ? 'http://localhost:8080/Transport/maritime' : 'http://localhost:8080/Transport/maritime/ordred')
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data.results.bindings);
+        setOrdred(!ordred)
+      })
+  }
 
   return (
     <Box
@@ -100,25 +76,24 @@ function DashboardContent() {
           {/* Recent Orders */}
           <Grid item xs={12}>
             <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-              <Title>Recent Orders</Title>
+              <Title>Maritime</Title>
+              <Button onClick={orederByPoids}>{ordred ? "revert" : "Order by date arrive"}</Button>
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Ship To</TableCell>
-                    <TableCell>Payment Method</TableCell>
-                    <TableCell align="right">Sale Amount</TableCell>
+                    <TableCell>model</TableCell>
+                    <TableCell>marque</TableCell>
+                    <TableCell>dateDepart</TableCell>
+                    <TableCell>dateArrivee </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
-                    <TableRow key={row.id}>
-                      <TableCell>{row.date}</TableCell>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.shipTo}</TableCell>
-                      <TableCell>{row.paymentMethod}</TableCell>
-                      <TableCell align="right">{`$${row.amount}`}</TableCell>
+                  {data?.map((row) => (
+                    <TableRow key={row.maritime.value}>
+                      <TableCell>{row.model.value}</TableCell>
+                      <TableCell>{row.marque.value}</TableCell>
+                      <TableCell>{row.dateDepart.value}</TableCell>
+                      <TableCell>{row.dateArrivee.value}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -41,7 +41,7 @@ function DashboardContent() {
   const [filtred, setFiltred] = React.useState(false)
   React.useEffect(() => {
     (() => {
-      fetch('http://localhost:8080/Transport/Conteneurs')
+      fetch('http://localhost:8080/Transport/routier')
         .then((response) => response.json())
         .then((data) => {
           console.log({data});
@@ -50,7 +50,7 @@ function DashboardContent() {
   }, [])
 
   const orederByPoids = () => {
-    fetch(ordred ? 'http://localhost:8080/Transport/Conteneurs' : 'http://localhost:8080/Transport/ConteneursOrderByPoids')
+    fetch(ordred ? 'http://localhost:8080/Transport/routier' : 'http://localhost:8080/Transport/routier/peugeot')
       .then((response) => response.json())
       .then((data) => {
         setData(data.results.bindings);
@@ -61,7 +61,7 @@ function DashboardContent() {
   }
 
   const filterByPoids = () => {
-    fetch(!filtred ? 'http://localhost:8080/Transport/Conteneurs/WherePoids' : 'http://localhost:8080/Transport/Conteneurs')
+    fetch(!filtred ? 'http://localhost:8080/Transport/routier/ordred' : 'http://localhost:8080/Transport/routier')
       .then((response) => response.json())
       .then((data) => {
         console.log({data})
@@ -91,29 +91,25 @@ function DashboardContent() {
           {/* Recent Orders */}
           <Grid item xs={12}>
             <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-              <Title>Conteneur</Title>
-              <Button onClick={orederByPoids}>{ordred ? "revert" : "Order by poids"}</Button>
-              <Button onClick={filterByPoids}>{filtred ? "revert" : "order and filter by poids >=28"}</Button>
+              <Title>Routier</Title>
+              <Button onClick={orederByPoids}>{ordred ? "revert" : "Peugeot"}</Button>
+              <Button onClick={filterByPoids}>{filtred ? "revert" : "ordred par datee depart"}</Button>
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>idConteneur</TableCell>
-                    <TableCell>largeur</TableCell>
-                    <TableCell>hauteur</TableCell>
-                    <TableCell>longeur </TableCell>
-                    <TableCell>poidsNet </TableCell>
-                    <TableCell >poidsVolumetrique</TableCell>
+                    <TableCell>marque</TableCell>
+                    <TableCell>model</TableCell>
+                    <TableCell>dateDepart</TableCell>
+                    <TableCell>dateArrivee </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {data?.map((row) => (
-                    <TableRow key={row.idConteneur.value}>
-                      <TableCell>{row.idConteneur.value}</TableCell>
-                      <TableCell>{row.largeur.value}</TableCell>
-                      <TableCell>{row.hauteur.value}</TableCell>
-                      <TableCell>{row.longeur.value}</TableCell>
-                      <TableCell>{row.poidsNet.value}</TableCell>
-                      <TableCell>{row.poidsVolumetrique?.value}</TableCell>
+                    <TableRow key={row.routier.value}>
+                      <TableCell>{row.marque.value}</TableCell>
+                      <TableCell>{row.model.value}</TableCell>
+                      <TableCell>{row.dateDepart.value}</TableCell>
+                      <TableCell>{row.dateArrivee.value}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -6,7 +6,15 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
-import Orders from "./Orders";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import Title from "./Title";
 
 function Copyright(props) {
   return (
@@ -26,7 +34,32 @@ function Copyright(props) {
   );
 }
 
+
 function DashboardContent() {
+  const [data, setData] = React.useState([])
+  const [ordred, setOrdred] = React.useState(false)
+  React.useEffect(() => {
+    (() => {
+      fetch('http://localhost:8080/Transport/')
+        .then((response) => response.json())
+        .then((data) => {
+          console.log({data});
+          setData(data.results.bindings)})
+    })()
+  }, [])
+
+  const orederByDate = () => {
+    fetch(ordred ? 'http://localhost:8080/Transport/' : 'http://localhost:8080/Transport/ordred')
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data.results.bindings);
+        setOrdred(!ordred);
+        console.log({data})
+      })
+  }
+
+
+
   return (
     <Box
       component="main"
@@ -46,7 +79,28 @@ function DashboardContent() {
           {/* Recent Orders */}
           <Grid item xs={12}>
             <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-              <Orders />
+              <Title>Transport</Title>
+              <Button onClick={orederByDate}>{ordred ? "revert" : "Order by datee depart"}</Button>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>model</TableCell>
+                    <TableCell>marque</TableCell>
+                    <TableCell>dateDepart </TableCell>
+                    <TableCell>dateArrivee </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data?.map((row) => (
+                    <TableRow key={row.transport.value}>
+                      <TableCell>{row.model.value}</TableCell>
+                      <TableCell>{row.marque.value}</TableCell>
+                      <TableCell>{row.dateDepart.value}</TableCell>
+                      <TableCell>{row.dateArrivee.value}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </Paper>
           </Grid>
         </Grid>

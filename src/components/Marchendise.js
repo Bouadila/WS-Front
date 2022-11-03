@@ -37,40 +37,52 @@ function Copyright(props) {
 
 function DashboardContent() {
   const [data, setData] = React.useState([])
-  const [ordred, setOrdred] = React.useState(false)
-  const [filtred, setFiltred] = React.useState(false)
   React.useEffect(() => {
     (() => {
-      fetch('http://localhost:8080/Transport/Conteneurs')
+      fetch('http://localhost:8080/Transport/Marchandies')
         .then((response) => response.json())
         .then((data) => {
-          console.log({data});
+          console.log({data})
           setData(data.results.bindings)})
     })()
   }, [])
 
-  const orederByPoids = () => {
-    fetch(ordred ? 'http://localhost:8080/Transport/Conteneurs' : 'http://localhost:8080/Transport/ConteneursOrderByPoids')
+  const all = () => {
+    fetch( 'http://localhost:8080/Transport/Marchandies')
       .then((response) => response.json())
       .then((data) => {
         setData(data.results.bindings);
-        if (filtred)
-          setFiltred(false)
-        setOrdred(!ordred)
+
       })
   }
 
-  const filterByPoids = () => {
-    fetch(!filtred ? 'http://localhost:8080/Transport/Conteneurs/WherePoids' : 'http://localhost:8080/Transport/Conteneurs')
+  const chimique = () => {
+    fetch( 'http://localhost:8080/Transport/Marchandies/typechemique')
       .then((response) => response.json())
       .then((data) => {
-        console.log({data})
         setData(data.results.bindings);
-        if (ordred)
-          setOrdred(false)
-        setFiltred(!filtred)
+
       })
   }
+
+  const meteaux = () => {
+    fetch( 'http://localhost:8080/Transport/Marchandies/typemetaux')
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data.results.bindings);
+
+      })
+  }
+
+  const frais = () => {
+    fetch( 'http://localhost:8080/Transport/Marchandies/typefraiches')
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data.results.bindings);
+
+      })
+  }
+
 
   return (
     <Box
@@ -91,29 +103,27 @@ function DashboardContent() {
           {/* Recent Orders */}
           <Grid item xs={12}>
             <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-              <Title>Conteneur</Title>
-              <Button onClick={orederByPoids}>{ordred ? "revert" : "Order by poids"}</Button>
-              <Button onClick={filterByPoids}>{filtred ? "revert" : "order and filter by poids >=28"}</Button>
+              <Title>Marchendise</Title>
+              <Button onClick={all}>all</Button>
+              <Button onClick={frais}>frais</Button>
+              <Button onClick={meteaux}>meteaux</Button>
+              <Button onClick={chimique}>chimique</Button>
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>idConteneur</TableCell>
-                    <TableCell>largeur</TableCell>
-                    <TableCell>hauteur</TableCell>
-                    <TableCell>longeur </TableCell>
-                    <TableCell>poidsNet </TableCell>
-                    <TableCell >poidsVolumetrique</TableCell>
+                    <TableCell>nomMarchandies</TableCell>
+                    <TableCell>poidsMarchandies</TableCell>
+                    <TableCell>typeMarchandies </TableCell>
+                    <TableCell >uniteMarchandies</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {data?.map((row) => (
-                    <TableRow key={row.idConteneur.value}>
-                      <TableCell>{row.idConteneur.value}</TableCell>
-                      <TableCell>{row.largeur.value}</TableCell>
-                      <TableCell>{row.hauteur.value}</TableCell>
-                      <TableCell>{row.longeur.value}</TableCell>
-                      <TableCell>{row.poidsNet.value}</TableCell>
-                      <TableCell>{row.poidsVolumetrique?.value}</TableCell>
+                    <TableRow key={row.marchandies.value}>
+                      <TableCell>{row.nomMarchandies.value}</TableCell>
+                      <TableCell>{row.poidsMarchandies.value}</TableCell>
+                      <TableCell>{row.typeMarchandies.value}</TableCell>
+                      <TableCell>{row.uniteMarchandies.value}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

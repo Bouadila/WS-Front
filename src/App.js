@@ -1,8 +1,18 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-import Dashboard from "./components/Dashboard";
 import Conteneurs from "./components/Conteneurs";
-import { Routes, Route, Link } from "react-router-dom";
+import Energie from "./components/Energie";
+import Marchendise from "./components/Marchendise";
+import Transport from "./components/Transport";
+import TransportEnergie from "./components/TransportEnergie";
+import Aerien from "./components/Aerien";
+import Maritime from "./components/Maritime";
+import Routier from "./components/Routier";
+import Ferroviaire from "./components/Ferroviaire";
+import Vehicule from "./components/Vehicule";
+
+
+import { Routes, Route } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -126,9 +136,17 @@ export default function App() {
           <List component="nav">{mainListItems}</List>
         </Drawer>
         <Routes>
-          <Route path="about" element={<Dashboard />} />
           <Route path="conteneurs" element={<Conteneurs />} />
-          <Route path="*" element={<Dashboard />} />
+          <Route path="energie" element={<Energie />} />
+          <Route path="marchendise" element={<Marchendise />} />
+          <Route path="transport" element={<Transport />} />
+          <Route path="transportEnergie" element={<TransportEnergie />} />
+          <Route path="aerien" element={<Aerien />} />
+          <Route path="maritime" element={<Maritime />} />
+          <Route path="routier" element={<Routier />} />
+          <Route path="ferroviaire" element={<Ferroviaire />} />
+          <Route path="vehicule" element={<Vehicule />} />
+          <Route path="*" element={<Conteneurs />} />
         </Routes>
       </Box>
     </ThemeProvider>
